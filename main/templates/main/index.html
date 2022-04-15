@@ -1,132 +1,248 @@
 {% extends 'main/base.html' %}{% load static %} {% block content %}
-<style>
-  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
-  }
-  body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background: #5256ad;
-  }
-  .drag-area {
-    border: 2px dashed #fff;
-    height: 500px;
-    width: 700px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-  .drag-area.active {
-    border: 2px solid #fff;
-  }
-  .drag-area .icon {
-    font-size: 100px;
-    color: #fff;
-  }
-  .drag-area header {
-    font-size: 30px;
-    font-weight: 500;
-    color: #fff;
-  }
-  .drag-area span {
-    font-size: 25px;
-    font-weight: 500;
-    color: #fff;
-    margin: 10px 0 15px 0;
-  }
-  .drag-area button {
-    padding: 10px 25px;
-    font-size: 20px;
-    font-weight: 500;
-    border: none;
-    outline: none;
-    background: #fff;
-    color: #5256ad;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  .drag-area img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 5px;
-  }
-  #myForm {
-    display: none;
-  }
-</style>
-<div class="drag-area">
-  <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
-  <header>Drag & Drop to Upload File</header>
-  <span>OR</span>
-  <button>Browse File</button>
-  <input type="file" name="myfile" hidden />
-</div>
-<form  id="myForm" class="mt-3 rounded-3 bg-transparent">
-    {% csrf_token %}
-    <div class="form-floating mb-3">
-        <select class="js-example-basic-multiple js-example-responsive js-states form-control " 
-        name="image_type" id="image_type" style="width: 100%;" required>
-            <option value="png">PNG</option>
-            <option value="jpg">JPG</option>
-            <option value="jpeg">JPEG</option>
-            <option value="tif">TIF</option>
-            <option value="tiff">TIFF</option>
-            <option value="bmp">BMP</option>
-            <option value="eps">EPS</option>
-            <option value="gif">GIF</option>
-            <!-- <option value="svg">SVG</option> -->
-        </select>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-sm-12 mx-auto moveable">
+      <div class="img_format">
+        <p class="ps-4 img_format_p">Select the file format you have</p>
+        <div class="container">
+          <div class="row">
+            <div class="col p-2">
+              <span class="format">png</span>
+            </div>
+            <div class="col p-2">
+              <span class="format">jpeg</span>
+            </div>
+            <div class="col p-2">
+              <span class="format">jpg</span>
+            </div>
+            <div class="col p-2">
+              <span class="format">bmp</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col p-2">
+              <span class="format">gif</span>
+            </div>
+            <div class="col p-2">
+              <span class="format">tiff</span>
+            </div>
+            <div class="col p-2">
+              <span class="format">eps</span>
+            </div>
+            <div class="col p-2">
+              <span class="format">tif</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <h4 class="h_4">
+          Convert
+          <span class="_from">____</span>
+          <span>to</span>
+          <span class="_to">____</span>
+        </h4>
+        <button class="btn mb-3 download">Download <i class="fas fa-angle-double-down"></i> </button>
+      </div>
+      <div class="container shadow p-4 bg-body rounded">
+        <div class="drag-area">
+          <button class="btn drop_btn">
+            <i class="fas fa-file-image"></i> Select File
+          </button>
+          <p class="drag_p">
+            Or you could just drop the files here. 5MB max. If you want more
+            just
+            <span style="color: #006042; font-weight: 700">sign up</span> and
+            we'll increase your limit.
+          </p>
+          <input type="file" name="myfile" hidden />
+        </div>
+      </div>
+      <div class="container shadow p-4 bg-body rounded bt_cn">
+        <div class="full_img">
+          <div class="container">
+            <div class="row">
+              <div class="col">
+                <div class="img_div">
+                  <i class="fas fa-times"></i>
+                  <img
+                    src="{% static 'main/img/img1.png' %}"
+                    class="images"
+                    alt="display image"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="img_div">
+                  <i class="fas fa-times"></i>
+                  <img
+                    src="{% static 'main/img/img2.png' %}"
+                    class="images"
+                    alt="display image"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="img_div">
+                  <i class="fas fa-times"></i>
+                  <img
+                    src="{% static 'main/img/img3.png' %}"
+                    class="images"
+                    alt="display image"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="img_div">
+                  <i class="fas fa-times"></i>
+                  <img
+                    src="{% static 'main/img/img4.png' %}"
+                    class="images"
+                    alt="display image"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="img_div">
+                  <i class="fas fa-times"></i>
+                  <img
+                    src="{% static 'main/img/img5.png' %}"
+                    class="images"
+                    alt="display image"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="img_div">
+                  <i class="fas fa-times"></i>
+                  <img
+                    src="{% static 'main/img/img6.png' %}"
+                    class="images"
+                    alt="display image"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="img_div">
+                  <i class="fas fa-times"></i>
+                  <img
+                    src="{% static 'main/img/img7.png' %}"
+                    class="images"
+                    alt="display image"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="img_div">
+                  <i class="fas fa-times"></i>
+                  <img
+                    src="{% static 'main/img/img8.png' %}"
+                    class="images"
+                    alt="display image"
+                  />
+                </div>
+              </div>
+              <!-- <div class="col"></div>
+              <div class="col"></div>
+              <div class="col"></div>
+              <div class="col"></div>
+              <div class="col"></div> -->
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <button class="btn btn-lg btn-primary" type="submit">Download</button>
-</form>
+  </div>
 </div>
-<script>
-
-$(document).ready(function() {
-        $('.js-example-basic-multiple').select2();
-        $("select").select2({
-            tags: "true",
-            placeholder: "Select format",
-            allowClear: true,
-            theme: "classic",
-            width: 'resolve'
-        });
-    });
-
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== "") {
-          var cookies = document.cookie.split(";");
-          for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === name + "=") {
-              cookieValue = decodeURIComponent(
-                cookie.substring(name.length + 1)
-              );
-              break;
-            }
-          }
+<script type="text/javascript">
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      var cookies = document.cookie.split(";");
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
         }
-        return cookieValue;
+      }
     }
-    var csrftoken = getCookie('csrftoken');
+    return cookieValue;
+  }
+  var csrftoken = getCookie("csrftoken");
   //selecting all required elements
   const dropArea = document.querySelector(".drag-area"),
-    dragText = dropArea.querySelector("header"),
-    button = dropArea.querySelector("button"),
+    button = dropArea.querySelector(".drop_btn"),
     input = dropArea.querySelector("input"),
-    myForm = document.querySelector("#myForm");
+    format_type = document.querySelectorAll(".format");
+  const download = document.querySelector(".download");
+  download.style.display = "none";
+
   let file; //this is a global variable and we'll use it inside multiple functions
+  const _to = document.querySelector("._to").innerHTML;
+  const _from = document.querySelector("._from").innerHTML;
+  let count = 0;
+
+  $(document).ready(function () {
+    $(".format").each((i, el) => {
+      $(el).on("click", () => {
+        // this allow only two elements
+        // to have the active_f class at a time
+        var count = 0;
+        for (let j=0; j <= $(".format").length - 1; j++) {
+          const wu = $(".format")[j]
+          if ($(wu).hasClass("active_f")) {
+            count++;
+          }
+        }
+
+        
+        if (count == 2 && $(el).hasClass("active_f")) {
+          $(el).toggleClass("active_f");
+          if ($(el).hasClass("active_f")) {
+            $(el).css("color", "rgb(96, 0, 0)");
+          } else {
+            $(el).css("color", "#006042");
+            $("._to").css("color", "#006042");
+            $("._to").text("____")
+          }
+          
+        } else if (count == 2) {
+          alert("Selection completed");
+        }else if (count == 1) {
+          $(el).toggleClass("active_f");
+          if ($(el).hasClass("active_f")) {
+            $(el).css("color", "rgb(96, 0, 0)");
+            $("._to").css("color", "rgb(96, 0, 0)");
+            $("._to").text($(el).text())
+          } else {
+            $(el).css("color", "#006042");
+            $("._from").css("color", "#006042");
+            $("._from").text("____")
+          }
+        } else if (count == 0) {
+          $(el).toggleClass("active_f");
+          if ($(el).hasClass("active_f")) {
+            $(el).css("color", "rgb(96, 0, 0)");
+            $("._from").css("color", "rgb(96, 0, 0)")
+            $("._from").text($(el).text())
+          } else {
+            $(el).css("color", "#006042");
+          }
+        }else {
+          $(el).toggleClass("active_f");
+          if ($(el).hasClass("active_f")) {
+            $(el).css("color", "rgb(96, 0, 0)");
+          } else {
+            $(el).css("color", "#006042");
+          }
+        }
+
+      });
+    });
+  });
+ 
 
   button.onclick = () => {
     input.click(); //if user click on the button then the input also clicked
@@ -143,13 +259,11 @@ $(document).ready(function() {
   dropArea.addEventListener("dragover", (event) => {
     event.preventDefault(); //preventing from default behaviour
     dropArea.classList.add("active");
-    dragText.textContent = "Release to Upload File";
   });
 
   //If user leave dragged File from DropArea
   dropArea.addEventListener("dragleave", () => {
     dropArea.classList.remove("active");
-    dragText.textContent = "Drag & Drop to Upload File";
   });
 
   //If user drop File on DropArea
@@ -159,10 +273,20 @@ $(document).ready(function() {
     file = event.dataTransfer.files[0];
     showFile(); //calling function
   });
+  
 
   function showFile() {
     let fileType = file.type; //getting selected file type
-    let validExtensions = ["image/jpeg", "image/jpg", "image/png", "image/tiff", "image/tif", "image/bmp", "image/eps", "image/gif"]; //adding some valid image extensions in array
+    let validExtensions = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/tiff",
+      "image/tif",
+      "image/bmp",
+      "image/eps",
+      "image/gif",
+    ]; //adding some valid image extensions in array
     if (validExtensions.includes(fileType)) {
       //if user selected file is an image file
       let fileReader = new FileReader(); //creating new FileReader object
@@ -176,33 +300,59 @@ $(document).ready(function() {
     } else {
       alert("This is not an Image File!");
       dropArea.classList.remove("active");
-      dragText.textContent = "Drag & Drop to Upload File";
     }
-    myForm.style.display = "block";
+    download.style.display = "inline";
   }
 
+  download.addEventListener("click", async (ev) => {
+    ev.preventDefault();
+    var image_type = document.querySelector("._to").innerHTML;
+    const MAX_SIZE = 5 * 1024 * 1024;
+    const check = file.size < MAX_SIZE
+    const auth_user  = "{{user.is_authenticated}}" == "True"
+    if (image_type == "____") {
+      alert("Select a file format")
+    }else if (check == true && auth_user == false ) {
+      var formData = new FormData();
+      formData.append("image_type", image_type);
+      formData.append("image", file);
   
-    myForm.addEventListener("submit", async (ev) => {
-        ev.preventDefault();
-        var image_type = document.getElementById("image_type").value;
-        var formData = new FormData();
-        formData.append('image_type', image_type);
-        formData.append('image', file);
-
-        const result = await fetch("", {
-            headers: { 
-                'X-CSRFToken': csrftoken
-            },
-            method: 'POST',
-            body: formData
-        })
+      const result = await fetch("", {
+        headers: {
+          "X-CSRFToken": csrftoken,
+        },
+        method: "POST",
+        body: formData,
+      })
         .then((response) => response.json())
         .then((json) => {
-            let file = json.file;
-            let filename = json.filename;
-            window.location.href = `download/${file}/${filename}`
+          let file = json.file;
+          let filename = json.filename;
+          window.location.href = `download/${file}/${filename}`;
         })
         .catch((error) => console.log(error));
-    })
+    }else if (check == false && auth_user == true ) {
+      var formData = new FormData();
+      formData.append("image_type", image_type);
+      formData.append("image", file);
+  
+      const result = await fetch("", {
+        headers: {
+          "X-CSRFToken": csrftoken,
+        },
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          let file = json.file;
+          let filename = json.filename;
+          window.location.href = `download/${file}/${filename}`;
+        })
+        .catch((error) => console.log(error));
+    }else {
+      $('#staticBackdrop2').modal('show');
+    }
+  });
 </script>
 {% endblock content %}

@@ -1,0 +1,52 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light shadow p-1 bg-body rounded">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <img src="{% static 'main/img/logo.png' %}" class="logo_img" alt="logo" />
+      <span class="logo_text">
+        <span style="color: #006042">Convert</span>
+        <span style="color: #000; margin-left: -0.3em">Dfile</span>
+      </span>
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasNavbar"
+      aria-controls="offcanvasNavbar"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="offcanvas offcanvas-end"
+      tabindex="-1"
+      id="offcanvasNavbar"
+      aria-labelledby="offcanvasNavbarLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
+        <button
+          type="button"
+          class="btn-close text-reset"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          {% if not request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link mx-2" id="login"  data-bs-toggle="modal" data-bs-target="#staticBackdrop2"  href="#">Log In</a>
+          </li>
+          <button class="btn nav_btn mx-3" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" href="#">Sign Up</button>
+          {% else %}
+          <li class="nav-item">
+            <a href="{% url 'logout_user' %}" class="btn nav_btn mx-3">Logout</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+

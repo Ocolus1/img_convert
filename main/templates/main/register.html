@@ -1,0 +1,188 @@
+{% load static %}
+<!-- Button trigger modal -->
+<!-- Modal -->
+<script src="https://apis.google.com/js/api:client.js"></script>
+<div
+    class="modal-dialog modal fade"
+    id="staticBackdrop"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2 class="text-center mh_2">Sign Up</h2>
+                <button
+                    type="button"
+                    id="btnClose"
+                    class="btn-close btn-sm close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+                <form
+                    action="{% url 'register' %}"
+                    id="myform"
+                    method="post"
+                    class="mb-4"
+                >
+                    <div class="alert message_div alert-danger alert-dismissible fade show" role="alert">
+                        <svg
+                            class="bi flex-shrink-0 me-2"
+                            width="24"
+                            height="24"
+                            role="img"
+                            aria-label="Danger:"
+                        >
+                            <use xlink:href="#exclamation-triangle-fill"/>
+                        </svg>
+                        <strong class="message"></strong>
+                    </div>
+                    <div class="alert message_div2 alert-success alert-dismissible fade show" role="alert">
+                        <svg
+                            class="bi flex-shrink-0 me-2"
+                            width="24"
+                            height="24"
+                            role="img"
+                            aria-label="Success:"
+                        >
+                            <use xlink:href="#check-circle-fill"/>
+                        </svg>
+                        <strong class="message"></strong>
+                    </div>
+                    {% csrf_token %}
+                    <div class="mb-5">
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control"
+                            id="exampleFormControlInput1"
+                            placeholder="Enter your email address"
+                        >
+                    </div>
+                    <div class="mb-5">
+                        <input
+                            type="password"
+                            name="password"
+                            class="form-control"
+                            id="Password"
+                            placeholder="Password"
+                        >
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <button
+                        class="btn mbtn1 text-center text-muted mb-2 mx-3"
+                        data-dismiss="modal"
+                        data-toggle="modal"
+                        data-target="#staticBackdrop2"
+                        type="submit"
+                    >
+                        <div class="spinner-border text-success mx-auto" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <span class="sign_up">Sign Up</span>
+                    </button>
+                    <a class="btn mbtn2 btn-outline-dark mb-5 mx-3" 
+                    href='{% url "social:begin" "google-oauth2" %}'
+                    ><i class="fab fa-google me-3"></i>Sign Up with Google</a>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<style>
+    .close {
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin: 2em;
+    }
+    .mh_2 {
+        margin-bottom: 2em;
+        font-weight: 100;
+    }
+    .mbtn1 {
+        color: #ffffff;
+        background-color: #006042;
+    }
+    .mbtn1:hover {
+        color: #ffffff;
+    }
+    .message_div{
+      display: none;
+    }
+    .message_div2{
+      display: none;
+    }
+    .fa-google {
+        background: conic-gradient(from -45deg, #ea4335 110deg, #4285f4 90deg 180deg, #34a853 180deg 270deg, #fbbc05 270deg) 73% 55%/150% 150% no-repeat;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+    }
+</style>
+<script>
+$(document).ready(function () {
+    $("#Password").on("change", () => {
+        $(".mbtn1").removeClass("text-muted")
+    })
+    $(".spinner-border").css("display", "none")
+
+    
+    $("#myform").submit(function(e) {
+
+      //prevent Default functionality
+      e.preventDefault();
+
+      //get the action-url of the form
+      var actionurl = e.currentTarget.action;
+      var form_data = $("#myform").serialize()
+
+      //do your own request an handle the results
+      $.ajax({
+          type:'post',
+          url: actionurl,
+          data: form_data,
+          beforeSend:function(){
+            $(".sign_up").css("display", "none")
+            $(".spinner-border").css("display", "block")
+          },
+          complete:function(){
+            $(".spinner-border").css("display", "none")
+            $(".sign_up").css("display", "block")
+          },
+          success:function(response){
+              if (response.message == "created") {
+                $(".message_div")
+                .fadeOut(function() {
+                  $(this).remove(); 
+                });
+                $(".message_div2").css("display", "block")
+                $(".message").text("Account created successfully")
+                $(".message_div2").delay(1000)
+                .fadeOut(function() {
+                  $(this).remove(); 
+                });
+                setTimeout(() => {
+                  $("#btnClose").click()
+                  // $('#staticBackdrop').modal('hide');
+                  $('#staticBackdrop2').modal('show');
+                }, 2000);
+              }else {
+                $(".message_div").css("display", "block")
+                $(".message").text(response.message)
+                console.log(response)
+              }
+          },
+          error: (response) => {
+            console.log(response)
+          }
+      });
+    });
+  });
+</script>
