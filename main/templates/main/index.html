@@ -7,30 +7,30 @@
         <div class="container">
           <div class="row">
             <div class="col p-2">
-              <span class="format">png</span>
+              <span class="img_t">png</span>
             </div>
             <div class="col p-2">
-              <span class="format">jpeg</span>
+              <span class="img_t">jpeg</span>
             </div>
             <div class="col p-2">
-              <span class="format">jpg</span>
+              <span class="img_t">jpg</span>
             </div>
             <div class="col p-2">
-              <span class="format">bmp</span>
+              <span class="img_t">bmp</span>
             </div>
           </div>
           <div class="row">
             <div class="col p-2">
-              <span class="format">gif</span>
+              <span class="img_t">gif</span>
             </div>
             <div class="col p-2">
-              <span class="format">tiff</span>
+              <span class="img_t">tiff</span>
             </div>
             <div class="col p-2">
-              <span class="format">eps</span>
+              <span class="img_t">eps</span>
             </div>
             <div class="col p-2">
-              <span class="format">tif</span>
+              <span class="img_t">tif</span>
             </div>
           </div>
         </div>
@@ -97,7 +97,7 @@
     button = dropArea.querySelector(".drop_btn"),
     input = dropArea.querySelector("input"),
     showArea = document.querySelector(".full_img_row"),
-    format_type = document.querySelectorAll(".format");
+    format_type = document.querySelectorAll(".img_t");
   const download = document.querySelector(".download");
   const dropAreaCon = document.querySelector(".drag-area-con");
   const remove = document.querySelector(".remove");
@@ -109,13 +109,13 @@
   let count = 0;
 
   $(document).ready(function () {
-    $(".format").each((i, el) => {
+    $(".img_t").each((i, el) => {
       $(el).on("click", () => {
         // this allow only two elements
         // to have the active_f class at a time
         var count = 0;
-        for (let j=0; j <= $(".format").length - 1; j++) {
-          const wu = $(".format")[j]
+        for (let j=0; j <= $(".img_t").length - 1; j++) {
+          const wu = $(".img_t")[j]
           if ($(wu).hasClass("active_f")) {
             count++;
           }
