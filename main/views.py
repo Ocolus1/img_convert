@@ -12,10 +12,15 @@ def index(request):
     if request.method == "POST":
         img_type  = request.POST["image_type"]
         image  = request.FILES["image"]
+        if len(request.FILES.getlist('image')) == 1:
+            mutate = Convert(request.FILES.getlist('image'), img_type)
+            file = mutate.convert()
+            filename = image.name.split(".")[0] + "." + img_type
+        else:
+            mutate = Convert(request.FILES.getlist('image'), img_type)
+            file = mutate.convert()
+            filename = file.split("/")[-1]
 
-        mutate = Convert(image, img_type)
-        file = mutate.convert()
-        filename = image.name.split(".")[0] + "." + img_type
         data = {
             "file": file.split("/")[-1],
             "filename": filename

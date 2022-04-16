@@ -44,109 +44,30 @@
         </h4>
         <button class="btn mb-3 download">Download <i class="fas fa-angle-double-down"></i> </button>
       </div>
-      <div class="container shadow p-4 bg-body rounded">
+      <div class="container drag-area-con shadow p-4 bg-body rounded">
         <div class="drag-area">
           <button class="btn drop_btn">
             <i class="fas fa-file-image"></i> Select File
           </button>
-          <p class="drag_p">
+          <p class="drag_p" data-mood="sool">
             Or you could just drop the files here. 5MB max. If you want more
             just
-            <span style="color: #006042; font-weight: 700">sign up</span> and
+            <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop" 
+            style="color: #006042; font-weight: 700">sign up</a> and
             we'll increase your limit.
           </p>
-          <input type="file" name="myfile" hidden />
+          <input type="file" name="myfile" multiple hidden  />
         </div>
       </div>
       <div class="container shadow p-4 bg-body rounded bt_cn">
         <div class="full_img">
           <div class="container">
-            <div class="row">
-              <div class="col">
-                <div class="img_div">
-                  <i class="fas fa-times"></i>
-                  <img
-                    src="{% static 'main/img/img1.png' %}"
-                    class="images"
-                    alt="display image"
-                  />
+            <div class="row full_img_row ">
+              <div class="card mt-5 border-0 text-center bg-transparent remove">
+                <div class="card-body mt-3 ">
+                  <h5 class="card-title">Your Images will show here</h5>
                 </div>
               </div>
-              <div class="col">
-                <div class="img_div">
-                  <i class="fas fa-times"></i>
-                  <img
-                    src="{% static 'main/img/img2.png' %}"
-                    class="images"
-                    alt="display image"
-                  />
-                </div>
-              </div>
-              <div class="col">
-                <div class="img_div">
-                  <i class="fas fa-times"></i>
-                  <img
-                    src="{% static 'main/img/img3.png' %}"
-                    class="images"
-                    alt="display image"
-                  />
-                </div>
-              </div>
-              <div class="col">
-                <div class="img_div">
-                  <i class="fas fa-times"></i>
-                  <img
-                    src="{% static 'main/img/img4.png' %}"
-                    class="images"
-                    alt="display image"
-                  />
-                </div>
-              </div>
-              <div class="col">
-                <div class="img_div">
-                  <i class="fas fa-times"></i>
-                  <img
-                    src="{% static 'main/img/img5.png' %}"
-                    class="images"
-                    alt="display image"
-                  />
-                </div>
-              </div>
-              <div class="col">
-                <div class="img_div">
-                  <i class="fas fa-times"></i>
-                  <img
-                    src="{% static 'main/img/img6.png' %}"
-                    class="images"
-                    alt="display image"
-                  />
-                </div>
-              </div>
-              <div class="col">
-                <div class="img_div">
-                  <i class="fas fa-times"></i>
-                  <img
-                    src="{% static 'main/img/img7.png' %}"
-                    class="images"
-                    alt="display image"
-                  />
-                </div>
-              </div>
-              <div class="col">
-                <div class="img_div">
-                  <i class="fas fa-times"></i>
-                  <img
-                    src="{% static 'main/img/img8.png' %}"
-                    class="images"
-                    alt="display image"
-                  />
-                </div>
-              </div>
-              <!-- <div class="col"></div>
-              <div class="col"></div>
-              <div class="col"></div>
-              <div class="col"></div>
-              <div class="col"></div> -->
             </div>
           </div>
         </div>
@@ -175,11 +96,14 @@
   const dropArea = document.querySelector(".drag-area"),
     button = dropArea.querySelector(".drop_btn"),
     input = dropArea.querySelector("input"),
+    showArea = document.querySelector(".full_img_row"),
     format_type = document.querySelectorAll(".format");
   const download = document.querySelector(".download");
+  const dropAreaCon = document.querySelector(".drag-area-con");
+  const remove = document.querySelector(".remove");
   download.style.display = "none";
 
-  let file; //this is a global variable and we'll use it inside multiple functions
+  var file; //this is a global variable and we'll use it inside multiple functions
   const _to = document.querySelector("._to").innerHTML;
   const _from = document.querySelector("._from").innerHTML;
   let count = 0;
@@ -248,9 +172,19 @@
     input.click(); //if user click on the button then the input also clicked
   };
 
+  const close_div = (id) => {
+    let im = document.querySelector(`#_${id}`)
+    if (im.parentNode) {
+      im.parentNode.removeChild(im);
+    }
+    file = Array.from(file);
+    file.splice(id,1);
+    console.log(file)
+  }
+
   input.addEventListener("change", function () {
     //getting user select file and [0] this means if user select multiple files then we'll select only the first one
-    file = this.files[0];
+    file = this.files;
     dropArea.classList.add("active");
     showFile(); //calling function
   });
@@ -268,90 +202,121 @@
 
   //If user drop File on DropArea
   dropArea.addEventListener("drop", (event) => {
-    event.preventDefault(); //preventing from default behaviour
+    event.preventDefault(); //preventing from default behavior
     //getting user select file and [0] this means if user select multiple files then we'll select only the first one
-    file = event.dataTransfer.files[0];
+    file = event.dataTransfer.files;
     showFile(); //calling function
   });
   
 
   function showFile() {
-    let fileType = file.type; //getting selected file type
-    let validExtensions = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/tiff",
-      "image/tif",
-      "image/bmp",
-      "image/eps",
-      "image/gif",
-    ]; //adding some valid image extensions in array
-    if (validExtensions.includes(fileType)) {
-      //if user selected file is an image file
-      let fileReader = new FileReader(); //creating new FileReader object
-      fileReader.onload = () => {
-        let fileURL = fileReader.result; //passing user file source in fileURL variable
-        // UNCOMMENT THIS BELOW LINE. I GOT AN ERROR WHILE UPLOADING THIS POST SO I COMMENTED IT
-        let imgTag = `<img src="${fileURL}" alt="image">`; //creating an img tag and passing user selected file source inside src attribute
-        dropArea.innerHTML = imgTag; //adding that created img tag inside dropArea container
-      };
-      fileReader.readAsDataURL(file);
-    } else {
-      alert("This is not an Image File!");
-      dropArea.classList.remove("active");
+    for (let im = 0; im <= file.length; im++) {
+      let fileType = file[im].type; //getting selected file type
+      let validExtensions = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/tiff",
+        "image/tif",
+        "image/bmp",
+        "image/eps",
+        "image/gif",
+      ]; //adding some valid image extensions in array
+      if (validExtensions.includes(fileType)) {
+        //if user selected file is an image file
+        let fileReader = new FileReader(); //creating new FileReader object
+        fileReader.onload = () => {
+        var fileURL = fileReader.result; //passing user file source in fileURL variable
+          // UNCOMMENT THIS BELOW LINE. I GOT AN ERROR WHILE UPLOADING THIS POST SO I COMMENTED IT
+          // let imgTag = `<img src="${fileURL}" alt="image">`; //creating an img tag and passing user selected file source inside src attribute
+          
+          function creatediv() {
+            
+            let i = document.createElement('i');
+            i.className = "fas fa-times";
+            i.setAttribute("onclick", `close_div(${im})`)
+
+            let img = document.createElement('img');
+            img.className = "images";
+            img.setAttribute("src", fileURL)
+            img.setAttribute("alt", "image")
+
+            let div2 = document.createElement('div');
+            div2.className = "img_div";
+            
+            let div1 = document.createElement('div');
+            div1.className = "col";
+            div1.setAttribute("id", `_${im}`)
+
+            div2.appendChild(i)
+            div2.appendChild(img)
+            div1.appendChild(div2)
+
+            return div1;
+          }
+          showArea.appendChild(creatediv()); //adding that created img tag inside dropArea container
+        };
+        fileReader.readAsDataURL(file[im]);
+        remove.style.display = "none";
+        dropAreaCon.style.display = "none";
+        download.style.display = "inline";
+      } else {
+        alert("This is not an Image File!");
+        dropArea.classList.remove("active");
+      }
+      
     }
-    download.style.display = "inline";
+    
   }
 
   download.addEventListener("click", async (ev) => {
     ev.preventDefault();
     var image_type = document.querySelector("._to").innerHTML;
     const MAX_SIZE = 5 * 1024 * 1024;
-    const check = file.size < MAX_SIZE
+    let check = true;
+    for (var im of file) {
+      const check_test = im.size < MAX_SIZE
+      const auth_user  = "{{user.is_authenticated}}" == "True"
+      if(check_test == false && auth_user == false) {
+        $('#staticBackdrop2').modal('show');
+        check = false;
+        break;
+      } 
+    }
+
+    const sendData = async () => {
+      var formData = new FormData();
+      formData.append("image_type", image_type);
+      for (i = 0; i < file.length; i++) {
+          formData.append('image', file[i]);
+        }
+      // formData.append("image", file);
+  
+      const result = await fetch("", {
+        headers: {
+          "X-CSRFToken": csrftoken,
+        },
+        method: "POST",
+        body: formData,
+      })
+      .then((response) => response.json())
+      .then((json) => {
+        let file = json.file;
+        let filename = json.filename;
+        window.location.href = `download/${file}/${filename}`;
+      })
+      .catch((error) => console.log(error));
+  }
+
     const auth_user  = "{{user.is_authenticated}}" == "True"
     if (image_type == "____") {
       alert("Select a file format")
-    }else if (check == true && auth_user == false ) {
-      var formData = new FormData();
-      formData.append("image_type", image_type);
-      formData.append("image", file);
-  
-      const result = await fetch("", {
-        headers: {
-          "X-CSRFToken": csrftoken,
-        },
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          let file = json.file;
-          let filename = json.filename;
-          window.location.href = `download/${file}/${filename}`;
-        })
-        .catch((error) => console.log(error));
-    }else if (check == false && auth_user == true ) {
-      var formData = new FormData();
-      formData.append("image_type", image_type);
-      formData.append("image", file);
-  
-      const result = await fetch("", {
-        headers: {
-          "X-CSRFToken": csrftoken,
-        },
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          let file = json.file;
-          let filename = json.filename;
-          window.location.href = `download/${file}/${filename}`;
-        })
-        .catch((error) => console.log(error));
-    }else {
-      $('#staticBackdrop2').modal('show');
+    }else if (check == false && auth_user == true){
+      sendData();
+    } else if (check == true && auth_user == false) {
+      sendData();
+    } else if (check == true && auth_user == true ) {
+      sendData();
     }
   });
 </script>
