@@ -42,14 +42,14 @@
           <span>to</span>
           <span class="_to">____</span>
         </h4>
-        <button class="btn mb-3 download">Download <i class="fas fa-angle-double-down"></i> </button>
+        <button class="btn mb-3 download">Convert <i class="fas fa-angle-double-down"></i> </button>
       </div>
-      <div class="container drag-area-con shadow p-4 bg-body rounded">
+      <div class="container drag-area-con mb-4 shadow p-4 bg-body rounded">
         <div class="drag-area">
           <button class="btn drop_btn">
             <i class="fas fa-file-image"></i> Select File
           </button>
-          <p class="drag_p" data-mood="sool">
+          <p class="drag_p" >
             Or you could just drop the files here. 5MB max. If you want more
             just
             <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop" 
@@ -59,15 +59,10 @@
           <input type="file" name="myfile" multiple hidden  />
         </div>
       </div>
-      <div class="container shadow p-4 bg-body rounded bt_cn">
+      <div class="container bt_cn">
         <div class="full_img">
           <div class="container">
             <div class="row full_img_row ">
-              <div class="card mt-5 border-0 text-center bg-transparent remove">
-                <div class="card-body mt-3 ">
-                  <h5 class="card-title">Your Images will show here</h5>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -100,9 +95,10 @@
     format_type = document.querySelectorAll(".img_t");
   const download = document.querySelector(".download");
   const dropAreaCon = document.querySelector(".drag-area-con");
-  const remove = document.querySelector(".remove");
+  const showOuterDiv = document.querySelector(".bt_cn");
   download.style.display = "none";
-
+  dropAreaCon.style.display = "none";
+  showOuterDiv.style.display = "none";
   var file; //this is a global variable and we'll use it inside multiple functions
   const _to = document.querySelector("._to").innerHTML;
   const _from = document.querySelector("._from").innerHTML;
@@ -130,6 +126,7 @@
             $(el).css("color", "#006042");
             $("._to").css("color", "#006042");
             $("._to").text("____")
+            $(".img_format_p").text("Select the file format you want to convert to")
           }
           
         } else if (count == 2) {
@@ -140,10 +137,13 @@
             $(el).css("color", "rgb(96, 0, 0)");
             $("._to").css("color", "rgb(96, 0, 0)");
             $("._to").text($(el).text())
+            $(".img_format_p").text("All done! Now upload your files for conversion")
+            $(".drag-area-con").css("display", "block")
           } else {
             $(el).css("color", "#006042");
             $("._from").css("color", "#006042");
             $("._from").text("____")
+            $(".img_format_p").text("Select the file format you have")
           }
         } else if (count == 0) {
           $(el).toggleClass("active_f");
@@ -151,8 +151,10 @@
             $(el).css("color", "rgb(96, 0, 0)");
             $("._from").css("color", "rgb(96, 0, 0)")
             $("._from").text($(el).text())
+            $(".img_format_p").text("Select the file format you want to convert to")
           } else {
             $(el).css("color", "#006042");
+            
           }
         }else {
           $(el).toggleClass("active_f");
@@ -160,6 +162,7 @@
             $(el).css("color", "rgb(96, 0, 0)");
           } else {
             $(el).css("color", "#006042");
+            $(".img_format_p").text("Select the file format you have")
           }
         }
 
@@ -179,7 +182,6 @@
     }
     file = Array.from(file);
     file.splice(id,1);
-    console.log(file)
   }
 
   input.addEventListener("change", function () {
@@ -233,32 +235,51 @@
           function creatediv() {
             
             let i = document.createElement('i');
-            i.className = "fas fa-times";
+            i.className = "fas fa-file-image col-2 ";
             i.setAttribute("onclick", `close_div(${im})`)
 
-            let img = document.createElement('img');
-            img.className = "images";
-            img.setAttribute("src", fileURL)
-            img.setAttribute("alt", "image")
+            let sp = document.createElement('span');
+            sp.className = " col-6 ";
+            sp.innerHTML = `${file[im].name}`
+
+            let sp2 = document.createElement('span');
+            sp2.className = " col-3 ";
+            sp2.innerHTML = `${Math.round((file[im].size / 1024))}KB`
+
+            // let img = document.createElement('img');
+            // img.className = "images";
+            // img.setAttribute("src", fileURL)
+            // img.setAttribute("alt", "image")
+
+            let btn = document.createElement('button');
+            btn.className = "btn-close float-end close_btn col-1";
+            btn.setAttribute("type", "button")
+            btn.setAttribute("onclick", `close_div(${im})`)
+
+            let div3 = document.createElement('div');
+            div3.className = "card-body row";
 
             let div2 = document.createElement('div');
-            div2.className = "img_div";
+            div2.className = "card border-0";
             
             let div1 = document.createElement('div');
-            div1.className = "col";
+            div1.className = "col-12 my-2 shadow p-3 bg-body rounded";
             div1.setAttribute("id", `_${im}`)
 
-            div2.appendChild(i)
-            div2.appendChild(img)
+            div3.appendChild(i)
+            div3.appendChild(sp)
+            div3.appendChild(sp2)
+            div3.appendChild(btn)
+            div2.appendChild(div3)
             div1.appendChild(div2)
 
             return div1;
           }
-          showArea.appendChild(creatediv()); //adding that created img tag inside dropArea container
+           showArea.appendChild(creatediv()); //adding that created img tag inside dropArea container
         };
         fileReader.readAsDataURL(file[im]);
-        remove.style.display = "none";
         dropAreaCon.style.display = "none";
+        showOuterDiv.style.display = "block";
         download.style.display = "inline";
       } else {
         alert("This is not an Image File!");
@@ -266,7 +287,6 @@
       }
       
     }
-    
   }
 
   download.addEventListener("click", async (ev) => {

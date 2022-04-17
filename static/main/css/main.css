@@ -131,43 +131,19 @@ html, body {
 }
 
 .bt_cn {
-    margin: 5em auto;
+    margin: 2em auto;
 }
 
-.full_img {
-    background: rgba(0, 96, 66, 0.1);
-    height: 16em;
-    width: 100%;
-    max-width: 100%;
-    margin: 1em auto;
+.fa-file-image {
+    font-size: 150%;
+    color: #006042;
 }
 
-/* .col {
-    position: relative;
-} */
-
-.img_div {
-    position: relative;
-    /* border: 2px solid blue; */
-    width: fit-content;
-    margin: .3em auto;
-    /* padding: .5em; */
-}
-.img_div i {
-    position: absolute;
+.close_btn {
     width: 1.2em;
     height: 1.2em;
-    right: 0;
-    top: 0;
     font-size: 70%;
-    padding: .2em 0 .2em .2em;
-    color: #ffffff;
-    background-color: #006042;
-    background-position: contain;
-    background-size: cover;
-    /* padding: .1em; */
     border-radius: 50%;
-    transform: translate(7px, -9px);
 }
 
 .img_div i:hover {
