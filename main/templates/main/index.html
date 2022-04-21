@@ -1,6 +1,16 @@
 {% extends 'main/base.html' %}{% load static %} {% block content %}
 <div class="container">
   <div class="row">
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+      <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            <strong>Your download will start soon.</strong>
+          </div>
+          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
     <div class="col-md-8 col-sm-12 mx-auto moveable">
       <div class="img_format">
         <p class="ps-4 img_format_p">Select the file format you have</p>
@@ -235,7 +245,7 @@
           function creatediv() {
             
             let i = document.createElement('i');
-            i.className = "fas fa-file-image col-2 ";
+            i.className = "fas fa-file-image col-1 col-sm-2";
             i.setAttribute("onclick", `close_div(${im})`)
 
             let sp = document.createElement('span');
@@ -260,10 +270,10 @@
             div3.className = "card-body row";
 
             let div2 = document.createElement('div');
-            div2.className = "card border-0";
+            div2.className = "card border-0 p-0";
             
             let div1 = document.createElement('div');
-            div1.className = "col-12 my-2 shadow p-3 bg-body rounded";
+            div1.className = "col-12 my-2 shadow p-sm-3 bg-body rounded";
             div1.setAttribute("id", `_${im}`)
 
             div3.appendChild(i)
@@ -321,6 +331,9 @@
       })
       .then((response) => response.json())
       .then((json) => {
+        var toastLiveExample = document.getElementById('liveToast')
+        var toast = new bootstrap.Toast(toastLiveExample)
+        toast.show()
         let file = json.file;
         let filename = json.filename;
         window.location.href = `download/${file}/${filename}`;
