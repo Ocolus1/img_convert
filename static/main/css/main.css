@@ -134,9 +134,12 @@ html, body {
     margin: 2em auto;
 }
 
-.fa-file-image {
+.fa-file-image{
     font-size: 150%;
     color: #006042;
+}
+.fa-file-upload {
+    color: #fff;
 }
 
 .close_btn {
@@ -153,4 +156,15 @@ html, body {
 .images {
     width: 4em;
     height: 4em;
+}
+
+.d_link {
+    text-decoration: none;
+    color: #006042;
+    font-weight: 600;
+}
+
+.d_link:hover {
+    cursor: pointer;
+    color: #006042;
 }

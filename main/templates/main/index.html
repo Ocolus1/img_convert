@@ -52,15 +52,14 @@
           <span>to</span>
           <span class="_to">____</span>
         </h4>
-        <button class="btn mb-3 download">Convert <i class="fas fa-angle-double-down"></i> </button>
       </div>
       <div class="container drag-area-con mb-4 shadow p-4 bg-body rounded">
         <div class="drag-area">
           <button class="btn drop_btn">
-            <i class="fas fa-file-image"></i> Select File
+            <i class="fas fa-file-upload"></i> Select File
           </button>
           <p class="drag_p" >
-            Or you could just drop the files here. 5MB max. If you want more
+            Or you could just drop the files here. 5MB max per file. If you want more
             just
             <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop" 
             style="color: #006042; font-weight: 700">sign up</a> and
@@ -76,6 +75,14 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="text-center">
+        <button class="btn mb-3 text-center download">
+          <div class="spinner-border loo text-success mx-auto" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <span class="convert">Convert</span> </button>
+        <p class="d_text mb-5 pb-5">Your file has been converted. <a href="" class="d_link">Click here to download now</a></p>
       </div>
     </div>
   </div>
@@ -106,6 +113,10 @@
   const download = document.querySelector(".download");
   const dropAreaCon = document.querySelector(".drag-area-con");
   const showOuterDiv = document.querySelector(".bt_cn");
+  const convert = document.querySelector(".convert");
+  const spin = document.querySelector(".loo");
+  const d_text = document.querySelector(".d_text");
+  const d_link = document.querySelector(".d_link");
   download.style.display = "none";
   dropAreaCon.style.display = "none";
   showOuterDiv.style.display = "none";
@@ -113,6 +124,8 @@
   const _to = document.querySelector("._to").innerHTML;
   const _from = document.querySelector("._from").innerHTML;
   let count = 0;
+  d_text.style.display = "none";
+  spin.style.display = "none";
 
   $(document).ready(function () {
     $(".img_t").each((i, el) => {
@@ -299,6 +312,12 @@
     }
   }
 
+  d_link.addEventListener("click", () => {
+    var toastLiveExample = document.getElementById('liveToast')
+    var toast = new bootstrap.Toast(toastLiveExample)
+    toast.show()
+  })
+
   download.addEventListener("click", async (ev) => {
     ev.preventDefault();
     var image_type = document.querySelector("._to").innerHTML;
@@ -312,6 +331,16 @@
         check = false;
         break;
       } 
+    }
+
+    const getfile = () => {
+      convert.style.display = "none"
+      spin.style.display = "block"
+      sendData()
+      setTimeout(() => {
+        download.style.display = "none"
+        d_text.style.display = "block"
+      }, 1000);
     }
 
     const sendData = async () => {
@@ -331,12 +360,10 @@
       })
       .then((response) => response.json())
       .then((json) => {
-        var toastLiveExample = document.getElementById('liveToast')
-        var toast = new bootstrap.Toast(toastLiveExample)
-        toast.show()
         let file = json.file;
         let filename = json.filename;
-        window.location.href = `download/${file}/${filename}`;
+        d_link.setAttribute("href", `download/${file}/${filename}`)
+        // window.location.href = `download/${file}/${filename}`;
       })
       .catch((error) => console.log(error));
   }
@@ -345,11 +372,11 @@
     if (image_type == "____") {
       alert("Select a file format")
     }else if (check == false && auth_user == true){
-      sendData();
+      getfile();
     } else if (check == true && auth_user == false) {
-      sendData();
+      getfile();
     } else if (check == true && auth_user == true ) {
-      sendData();
+      getfile();
     }
   });
 </script>
