@@ -72,10 +72,10 @@
                 </div>
                 <div class="d-grid gap-2">
                     <button
-                        class="btn mbtn1 text-center text-muted mb-2 mx-3"
+                        class="btn mbtn3 text-center text-muted mb-2 mx-3"
                         data-dismiss="modal"
                         data-toggle="modal"
-                        data-target="#staticBackdrop2"
+                        data-target="#staticBackdrop"
                         type="submit"
                     >
                         <div class="spinner-border win text-success mx-auto" role="status">
@@ -103,11 +103,11 @@
         margin-bottom: 2em;
         font-weight: 100;
     }
-    .mbtn1 {
+    .mbtn3 {
         color: #ffffff;
         background-color: #006042;
     }
-    .mbtn1:hover {
+    .mbtn3:hover {
         color: #ffffff;
     }
     .message_div{
@@ -127,18 +127,15 @@
 <script>
 $(document).ready(function () {
     $("#Password").on("change", () => {
-        $(".mbtn1").removeClass("text-muted")
+        $(".mbtn3").removeClass("text-muted")
     })
     $(".win").css("display", "none")
 
-    
-    $("#myform").submit(function(e) {
-
+    $(".mbtn3").click((e) => {
       //prevent Default functionality
       e.preventDefault();
-
       //get the action-url of the form
-      var actionurl = e.currentTarget.action;
+      var actionurl = "register"
       var form_data = $("#myform").serialize()
 
       //do your own request an handle the results
@@ -167,9 +164,9 @@ $(document).ready(function () {
                   $(this).remove(); 
                 });
                 setTimeout(() => {
+                $(".message_div2").css("display", "none")
                   $("#btnClose").click()
-                  // $('#staticBackdrop').modal('hide');
-                  $('#staticBackdrop2').modal('show');
+                $('#staticBackdrop2').modal('show');
                 }, 2000);
               }else {
                 $(".message_div").css("display", "block")
@@ -181,6 +178,7 @@ $(document).ready(function () {
             console.log(response)
           }
       });
-    });
+    })
+    
   });
 </script>

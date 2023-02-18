@@ -20,6 +20,7 @@ html, body {
     font-family: 'Futura Bk BT';
     overflow-x: hidden;
     height: 100%;
+    font-size: 1.125rem;
 }
 
 .logo_img {
@@ -55,8 +56,8 @@ html, body {
 .img_t {
     color: #006042;
     padding: 1em;
-    cursor: pointer; 
-    margin: 1em; 
+    cursor: pointer;
+    margin: 1em;
 }
 
 
@@ -75,6 +76,16 @@ html, body {
     padding: 1em;
     font-size: 150%;
     font-weight: 600;
+}
+
+@media screen and (min-width: 992px) {
+    .h_4 {
+        font-size: 350%;
+    }
+
+    .img_t {
+        font-size: 150%;
+    }
 }
 
 .download {

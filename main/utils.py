@@ -28,7 +28,12 @@ class Convert:
             name = f"./download/{self.generate_name()}"
 
             shape = builder.insert_image(self.img[0].read())
-            shape.image_data.save(name)
+            try:
+                shape.image_data.save(name)
+            except RuntimeError:
+                path = os.path.join("download")
+                os.mkdir(path)
+                shape.image_data.save(name)
             return name
         else:
             for x in self.img:

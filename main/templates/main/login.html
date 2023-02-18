@@ -1,64 +1,80 @@
 {% load static %}
 <div
-  class="modal fade mt-5 pt-md-5"
-  id="staticBackdrop2"
-  tabindex="-1"
-  aria-labelledby="staticBackdropLabel2"
-  aria-hidden="true"
+    class="modal fade mt-5 pt-md-5"
+    id="staticBackdrop2"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel2"
+    aria-hidden="true"
 >
-  <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-body">
-            <h2 class="text-center mh_2">Log In</h2>
-            <button
-              type="button"
-              class="btn-close btn-sm close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-            <form action="{% url 'login_user' %}" method="post" class="mb-4">
-                <div class="alert message_div alert-danger alert-dismissible fade show" role="alert">
-                  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
-                  <use xlink:href="#exclamation-triangle-fill"/></svg>
-                  <strong class="message"></strong>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2 class="text-center mh_2">Log In</h2>
+                <button
+                    type="button"
+                    class="btn-close btn-sm close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+                <form
+                    action="{% url 'login_user' %}"
+                    method="post"
+                    id="myformlogin"
+                    class="mb-4"
+                >
+                    <div class="alert message_div_lg alert-danger alert-dismissible fade show" role="alert">
+                        <svg
+                            class="bi flex-shrink-0 me-2"
+                            width="24"
+                            height="24"
+                            role="img"
+                            aria-label="Danger:"
+                        >
+                            <use xlink:href="#exclamation-triangle-fill"/>
+                        </svg>
+                        <strong class="message_lg"></strong>
+                    </div>
+                    {% csrf_token %}
+                    <div class="mb-5">
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control"
+                            id="exampleFormControlInput1_lg"
+                            placeholder="Enter your email address"
+                        >
+                    </div>
+                    <div class="mb-5">
+                        <input
+                            type="password"
+                            name="password"
+                            class="form-control"
+                            id="Password_lg"
+                            placeholder="Password"
+                        >
+                    </div>
                 </div>
-                {% csrf_token %}
-                <div class="mb-5">
-                  <input
-                    type="email"
-                    name="email"
-                    class="form-control"
-                    id="exampleFormControlInput1_lg"
-                    placeholder="Enter your email address"
-                  />
+                <div class="d-grid gap-2">
+                    <button
+                        type="submit"
+                        class="btn mbtn1 text-center text-muted mb-2 mx-3"
+                        data-dismiss="modal"
+                        data-toggle="modal"
+                        data-target="#staticBackdrop2"
+                    >
+                        <div class="spinner-border win text-success mx-auto" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <span class="sign_up">Log In</span>
+                    </button>
+                    <a class="btn mbtn2 btn-outline-dark mb-5 mx-3" href='{% url "social:begin" "google-oauth2" %}'>
+                        <i class="fab fa-google me-3"></i>Log In with Google
+                    </a>
                 </div>
-                <div class="mb-5">
-                  <input
-                    type="password"
-                    name="password"
-                    class="form-control"
-                    id="Password_lg"
-                    placeholder="Password"
-                  />
-                </div>
-              </div>
-              <div class="d-grid gap-2">
-            
-                <button class="btn mbtn1 text-center text-muted mb-2 mx-3" data-dismiss="modal" 
-                data-toggle="modal" data-target="#staticBackdrop2" type="submit">
-                  <div class="spinner-border win text-success mx-auto" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                  <span class="sign_up">Log In</span>
-              </button>
-              <a class="btn mbtn2 btn-outline-dark mb-5 mx-3" 
-              href='{% url "social:begin" "google-oauth2" %}'
-              ><i class="fab fa-google me-3"></i>Log In with Google</a>
-              </div>
             </form>
         </div>
     </div>
-  </div>
+</div>
 </div>
 <style>
     .close {
@@ -78,6 +94,9 @@
     .mbtn1:hover {
         color: #ffffff;
     }
+    .message_div_lg{
+      display: none;
+    }
     .fa-google {
         background: conic-gradient(from -45deg, #ea4335 110deg, #4285f4 90deg 180deg, #34a853 180deg 270deg, #fbbc05 270deg) 73% 55%/150% 150% no-repeat;
         -webkit-background-clip: text;
@@ -85,25 +104,20 @@
         color: transparent;
         -webkit-text-fill-color: transparent;
     }
-
 </style>
-
 <script>
 $(document).ready(function () {
-    $("#Password").on("change", () => {
+    $("#Password_lg").on("change", () => {
         $(".mbtn1").removeClass("text-muted")
     })
     $(".win").css("display", "none")
 
-    
-    $("#myform").submit(function(e) {
-
+    $(".mbtn1").click((e) => {
       //prevent Default functionality
       e.preventDefault();
-
       //get the action-url of the form
-      var actionurl = e.currentTarget.action;
-      var form_data = $("#myform").serialize()
+      var actionurl = "login_user"
+      var form_data = $("#myformlogin").serialize()
 
       //do your own request an handle the results
       $.ajax({
@@ -120,14 +134,16 @@ $(document).ready(function () {
           },
           success:function(response){
               if (response.message == "Invalid email or Password") {
-                $(".message_div").css("display", "block")
-                $(".message").text(response.message)
+                $(".message_div_lg").css("display", "block")
+                $(".message_lg").text(response.message)
+              }else if (response.message == "login successful"){
+                window.location.reload();
               }
           },
           error: (response) => {
             console.log(response)
           }
       });
-    });
+    })
   });
 </script>

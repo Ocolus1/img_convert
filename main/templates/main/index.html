@@ -1,13 +1,36 @@
 {% extends 'main/base.html' %}{% load static %} {% block content %}
-<div class="container">
+<div class="container mb-5 pb-5">
   <div class="row">
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-      <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div
+        id="liveToast"
+        class="toast"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
         <div class="d-flex">
           <div class="toast-body">
             <strong>Your download will start soon.</strong>
           </div>
-          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          <button
+            type="button"
+            class="btn-close me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
+        </div>
+      </div>
+      <div class="position-fixed top-0 end-0 p-3 " style="z-index: 11; margin-top: 5rem; margin-right: 2rem;">
+        <div class="toast align-items-center bg-danger text-white "
+        id="liveToast2"
+        role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="d-flex">
+            <div class="toast-body">
+            <strong>Type Selection completed!</strong>
+           </div>
+            <button type="button" class="btn-close me-2 m-auto text-body" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
         </div>
       </div>
     </div>
@@ -54,25 +77,34 @@
         </h4>
       </div>
       <div class="container drag-area-con mb-4 shadow p-4 bg-body rounded">
+        {% csrf_token %}
         <div class="drag-area">
           <button class="btn drop_btn">
-            <i class="fas fa-file-upload"></i> Select File
+            <i class="fas fa-file-upload"></i>
+            Select File
           </button>
-          <p class="drag_p" >
-            Or you could just drop the files here. 5MB max per file. If you want more
-            just
-            <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop" 
-            style="color: #006042; font-weight: 700">sign up</a> and
-            we'll increase your limit.
+          <p class="drag_p">
+            Or you could just drop the files here.
+            {% if not request.user.is_authenticated %}
+            5MB max per file. If you want
+            more just
+            <a
+              href="#"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+              style="color: #006042; font-weight: 700"
+              >sign up</a
+            >
+            and we'll increase your limit.
+            {% else %} {% endif %}
           </p>
-          <input type="file" name="myfile" multiple hidden  />
+          <input type="file" name="myfile" multiple hidden />
         </div>
       </div>
       <div class="container bt_cn">
         <div class="full_img">
           <div class="container">
-            <div class="row full_img_row ">
-            </div>
+            <div class="row full_img_row"></div>
           </div>
         </div>
       </div>
@@ -81,8 +113,12 @@
           <div class="spinner-border loo text-success mx-auto" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
-          <span class="convert">Convert</span> </button>
-        <p class="d_text mb-5 pb-5">Your file has been converted. <a href="" class="d_link">Click here to download now</a></p>
+          <span class="convert">Convert</span>
+        </button>
+        <p class="d_text mb-5 pb-5">
+          Your file has been converted.
+          <a href="" class="d_link">Click here to download now</a>
+        </p>
       </div>
     </div>
   </div>
@@ -103,7 +139,8 @@
     }
     return cookieValue;
   }
-  var csrftoken = getCookie("csrftoken");
+  // var csrftoken = getCookie("csrftoken");
+  const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
   //selecting all required elements
   const dropArea = document.querySelector(".drag-area"),
     button = dropArea.querySelector(".drop_btn"),
@@ -133,79 +170,105 @@
         // this allow only two elements
         // to have the active_f class at a time
         var count = 0;
-        for (let j=0; j <= $(".img_t").length - 1; j++) {
-          const wu = $(".img_t")[j]
+        for (let j = 0; j <= $(".img_t").length - 1; j++) {
+          const wu = $(".img_t")[j];
           if ($(wu).hasClass("active_f")) {
             count++;
           }
         }
 
-        
         if (count == 2 && $(el).hasClass("active_f")) {
           $(el).toggleClass("active_f");
           if ($(el).hasClass("active_f")) {
             $(el).css("color", "rgb(96, 0, 0)");
           } else {
             $(el).css("color", "#006042");
-            $("._to").css("color", "#006042");
-            $("._to").text("____")
-            $(".img_format_p").text("Select the file format you want to convert to")
+            if ($(el).text() == $("._to").text()) {
+              $("._to").css("color", "#006042");
+              $("._to").text("____");
+              $(".img_format_p").text(
+              "Select the file format you want to convert to"
+            );
+            }else {
+              // reset everything to return to the
+              // selecting from the beginning
+              $("._from").css("color", "#006042");
+              $("._from").text("____");
+              $("._to").css("color", "#006042");
+              $("._to").text("____");
+              $(".img_t").removeClass("active_f");
+              $(".img_t").css("color", "#006042");
+              $(".img_format_p").text("Select the file format you have");
+            }
+
           }
-          
         } else if (count == 2) {
-          alert("Selection completed");
-        }else if (count == 1) {
+          // alert("Selection completed");
+          var toastLiveExample2 = document.getElementById("liveToast2");
+          var toast2 = new bootstrap.Toast(toastLiveExample2);
+          toast2.show();
+          console.log(toast2)
+        } else if (count == 1) { // the type format has been clicked the second time this will run
           $(el).toggleClass("active_f");
           if ($(el).hasClass("active_f")) {
             $(el).css("color", "rgb(96, 0, 0)");
             $("._to").css("color", "rgb(96, 0, 0)");
-            $("._to").text($(el).text())
-            $(".img_format_p").text("All done! Now upload your files for conversion")
-            $(".drag-area-con").css("display", "block")
+            $("._to").text($(el).text());
+            $(".img_format_p").text(
+              "All done! Now upload your files for conversion"
+            );
+            $(".drag-area-con").css("display", "block");
           } else {
             $(el).css("color", "#006042");
             $("._from").css("color", "#006042");
-            $("._from").text("____")
-            $(".img_format_p").text("Select the file format you have")
+            $("._from").text("____");
+            $(".img_format_p").text("Select the file format you have");
           }
-        } else if (count == 0) {
+        } else if (count == 0) { // If the type format is  clicked once
           $(el).toggleClass("active_f");
           if ($(el).hasClass("active_f")) {
             $(el).css("color", "rgb(96, 0, 0)");
-            $("._from").css("color", "rgb(96, 0, 0)")
-            $("._from").text($(el).text())
-            $(".img_format_p").text("Select the file format you want to convert to")
+            $("._from").css("color", "rgb(96, 0, 0)");
+            $("._from").text($(el).text());
+            $(".img_format_p").text(
+              "Select the file format you want to convert to"
+            );
           } else {
             $(el).css("color", "#006042");
-            
           }
-        }else {
+        } else {
           $(el).toggleClass("active_f");
           if ($(el).hasClass("active_f")) {
             $(el).css("color", "rgb(96, 0, 0)");
           } else {
             $(el).css("color", "#006042");
-            $(".img_format_p").text("Select the file format you have")
+            $(".img_format_p").text("Select the file format you have");
           }
         }
-
       });
     });
   });
- 
 
   button.onclick = () => {
     input.click(); //if user click on the button then the input also clicked
   };
 
   const close_div = (id) => {
-    let im = document.querySelector(`#_${id}`)
+    // This function removes an image from the image collection
+    let im = document.querySelector(`#_${id}`);
     if (im.parentNode) {
       im.parentNode.removeChild(im);
     }
     file = Array.from(file);
-    file.splice(id,1);
-  }
+    file.splice(id, 1);
+    if (file.length == 0) {
+      dropAreaCon.style.display = "block";
+      showOuterDiv.style.display = "none";
+      download.style.display = "none";
+      d_text.style.display = "none";
+      file.length = 0; // reset the file array
+    }
+  };
 
   input.addEventListener("change", function () {
     //getting user select file and [0] this means if user select multiple files then we'll select only the first one
@@ -216,7 +279,7 @@
 
   //If user Drag File Over DropArea
   dropArea.addEventListener("dragover", (event) => {
-    event.preventDefault(); //preventing from default behaviour
+    event.preventDefault(); //preventing from default behavior
     dropArea.classList.add("active");
   });
 
@@ -232,7 +295,6 @@
     file = event.dataTransfer.files;
     showFile(); //calling function
   });
-  
 
   function showFile() {
     for (let im = 0; im <= file.length; im++) {
@@ -251,54 +313,53 @@
         //if user selected file is an image file
         let fileReader = new FileReader(); //creating new FileReader object
         fileReader.onload = () => {
-        var fileURL = fileReader.result; //passing user file source in fileURL variable
+          var fileURL = fileReader.result; //passing user file source in fileURL variable
           // UNCOMMENT THIS BELOW LINE. I GOT AN ERROR WHILE UPLOADING THIS POST SO I COMMENTED IT
           // let imgTag = `<img src="${fileURL}" alt="image">`; //creating an img tag and passing user selected file source inside src attribute
-          
+
           function creatediv() {
-            
-            let i = document.createElement('i');
+            let i = document.createElement("i");
             i.className = "fas fa-file-image col-1 col-sm-2";
-            i.setAttribute("onclick", `close_div(${im})`)
+            // i.setAttribute("onclick", `close_div(${im})`) // setting attribute to close the div
 
-            let sp = document.createElement('span');
+            let sp = document.createElement("span");
             sp.className = " col-6 ";
-            sp.innerHTML = `${file[im].name}`
+            sp.innerHTML = `${file[im].name}`;
 
-            let sp2 = document.createElement('span');
+            let sp2 = document.createElement("span");
             sp2.className = " col-3 ";
-            sp2.innerHTML = `${Math.round((file[im].size / 1024))}KB`
+            sp2.innerHTML = `${Math.round(file[im].size / 1024)}KB`;
 
             // let img = document.createElement('img');
             // img.className = "images";
             // img.setAttribute("src", fileURL)
             // img.setAttribute("alt", "image")
 
-            let btn = document.createElement('button');
+            let btn = document.createElement("button");
             btn.className = "btn-close float-end close_btn col-1";
-            btn.setAttribute("type", "button")
-            btn.setAttribute("onclick", `close_div(${im})`)
+            btn.setAttribute("type", "button");
+            btn.setAttribute("onclick", `close_div(${im})`);
 
-            let div3 = document.createElement('div');
+            let div3 = document.createElement("div");
             div3.className = "card-body row";
 
-            let div2 = document.createElement('div');
+            let div2 = document.createElement("div");
             div2.className = "card border-0 p-0";
-            
-            let div1 = document.createElement('div');
-            div1.className = "col-12 my-2 shadow p-sm-3 bg-body rounded";
-            div1.setAttribute("id", `_${im}`)
 
-            div3.appendChild(i)
-            div3.appendChild(sp)
-            div3.appendChild(sp2)
-            div3.appendChild(btn)
-            div2.appendChild(div3)
-            div1.appendChild(div2)
+            let div1 = document.createElement("div");
+            div1.className = "col-12 my-2 shadow p-sm-3 bg-body rounded";
+            div1.setAttribute("id", `_${im}`);
+
+            div3.appendChild(i);
+            div3.appendChild(sp);
+            div3.appendChild(sp2);
+            div3.appendChild(btn);
+            div2.appendChild(div3);
+            div1.appendChild(div2);
 
             return div1;
           }
-           showArea.appendChild(creatediv()); //adding that created img tag inside dropArea container
+          showArea.appendChild(creatediv()); //adding that created img tag inside dropArea container
         };
         fileReader.readAsDataURL(file[im]);
         dropAreaCon.style.display = "none";
@@ -308,15 +369,14 @@
         alert("This is not an Image File!");
         dropArea.classList.remove("active");
       }
-      
     }
   }
 
   d_link.addEventListener("click", () => {
-    var toastLiveExample = document.getElementById('liveToast')
-    var toast = new bootstrap.Toast(toastLiveExample)
-    toast.show()
-  })
+    var toastLiveExample = document.getElementById("liveToast");
+    var toast = new bootstrap.Toast(toastLiveExample);
+    toast.show();
+  });
 
   download.addEventListener("click", async (ev) => {
     ev.preventDefault();
@@ -324,33 +384,34 @@
     const MAX_SIZE = 5 * 1024 * 1024;
     let check = true;
     for (var im of file) {
-      const check_test = im.size < MAX_SIZE
-      const auth_user  = "{{user.is_authenticated}}" == "True"
-      if(check_test == false && auth_user == false) {
-        $('#staticBackdrop2').modal('show');
+      const check_test = im.size < MAX_SIZE;
+      const auth_user = "{{user.is_authenticated}}" == "True";
+      if (check_test == false && auth_user == false) {
+        $("#staticBackdrop2").modal("show");
         check = false;
         break;
-      } 
+      }
     }
 
-    const getfile = () => {
-      convert.style.display = "none"
-      spin.style.display = "block"
-      sendData()
+    const getfile = async () => {
+      convert.style.display = "none";
+      spin.style.display = "block";
+      await sendData();
       setTimeout(() => {
-        download.style.display = "none"
-        d_text.style.display = "block"
+        spin.style.display = "none"; // setting the spinner to none
+        convert.style.display = "block"; // setting the convert button to block
+        download.style.display = "none"; // setting the download div to none
+        d_text.style.display = "block";
       }, 1000);
-    }
+    };
 
     const sendData = async () => {
       var formData = new FormData();
       formData.append("image_type", image_type);
       for (i = 0; i < file.length; i++) {
-          formData.append('image', file[i]);
-        }
+        formData.append("image", file[i]);
+      }
       // formData.append("image", file);
-  
       const result = await fetch("", {
         headers: {
           "X-CSRFToken": csrftoken,
@@ -358,24 +419,24 @@
         method: "POST",
         body: formData,
       })
-      .then((response) => response.json())
-      .then((json) => {
-        let file = json.file;
-        let filename = json.filename;
-        d_link.setAttribute("href", `download/${file}/${filename}`)
-        // window.location.href = `download/${file}/${filename}`;
-      })
-      .catch((error) => console.log(error));
-  }
+        .then((response) => response.json())
+        .then((json) => {
+          let file = json.file;
+          let filename = json.filename;
+          d_link.setAttribute("href", `download/${file}/${filename}`);
+          // window.location.href = `download/${file}/${filename}`;
+        })
+        .catch((error) => console.log(error));
+    };
 
-    const auth_user  = "{{user.is_authenticated}}" == "True"
+    const auth_user = "{{user.is_authenticated}}" == "True";
     if (image_type == "____") {
-      alert("Select a file format")
-    }else if (check == false && auth_user == true){
+      alert("Select a file format");
+    } else if (check == false && auth_user == true) {
       getfile();
     } else if (check == true && auth_user == false) {
       getfile();
-    } else if (check == true && auth_user == true ) {
+    } else if (check == true && auth_user == true) {
       getfile();
     }
   });
