@@ -3,4 +3,3 @@ Django
 django-environ
 Pillow
 social-auth-app-django
-social-auth-core
