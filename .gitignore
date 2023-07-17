@@ -4,3 +4,5 @@ env
 su.py
 .vercel
 __pycache__/
+*.py[cod]
+*$py.class
