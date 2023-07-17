@@ -3,4 +3,4 @@
 env
 su.py
 .vercel
-__pycache__
+__pycache__/

@@ -41,16 +41,12 @@ html, body {
 
 .nav_btn:hover {
     color: #ffffff;
-    font-size: 110%;
+    /* font-size: 110%; */
 }
 
 .nav-link {
     color: #006042;
     padding: .3em .5em;
-}
-
-.nav-link:hover {
-    font-size: 110%;
 }
 
 .img_t {
@@ -63,6 +59,12 @@ html, body {
 
 .img_format {
     padding: 7em 1em 5em 1em;
+}
+
+.rem_header{
+  background: linear-gradient(to right, #006042, #000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 @media screen and (max-width: 768px) {
@@ -80,7 +82,7 @@ html, body {
 
 @media screen and (min-width: 992px) {
     .h_4 {
-        font-size: 350%;
+        font-size: 200%;
     }
 
     .img_t {
